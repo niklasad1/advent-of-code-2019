@@ -4,9 +4,7 @@
 //!
 //! `<https://adventofcode.com/2019>`
 
-use std::{
-    fmt::{Debug, Display},
-};
+use std::fmt::{Debug, Display};
 
 pub mod day1;
 pub mod day2;
