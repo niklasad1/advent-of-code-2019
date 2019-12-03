@@ -1,17 +1,25 @@
-use advent_of_code_2019::{day1::Day1, day2::Day2, AdventOfCodeBuilder, AdventOfCodeRunner};
+use advent_of_code_2019::{
+    day1, day2, day3, AdventOfCodeBuilder, AdventOfCodeRunner, INPUT_DAY1, INPUT_DAY2, INPUT_DAY3,
+};
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 
-criterion_group!(benches, day1, day2);
+criterion_group!(benches, d1, d2, d3);
 criterion_main!(benches);
 
-fn day1(c: &mut Criterion) {
+fn d1(c: &mut Criterion) {
     c.bench_function("day1", |b| {
-        b.iter(|| black_box(Day1::build().unwrap().run().unwrap()))
+        b.iter(|| black_box(day1::Input::build(INPUT_DAY1).unwrap().run().unwrap()))
     });
 }
 
-fn day2(c: &mut Criterion) {
+fn d2(c: &mut Criterion) {
     c.bench_function("day2", |b| {
-        b.iter(|| black_box(Day2::build().unwrap().run().unwrap()))
+        b.iter(|| black_box(day2::Input::build(INPUT_DAY2).unwrap().run().unwrap()))
+    });
+}
+
+fn d3(c: &mut Criterion) {
+    c.bench_function("day3", |b| {
+        b.iter(|| black_box(day3::Input::build(INPUT_DAY3).unwrap().run().unwrap()))
     });
 }

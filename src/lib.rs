@@ -1,4 +1,4 @@
-#![warn(rust_2018_idioms, missing_docs)]
+#![warn(rust_2018_idioms)]
 
 //! Library for solving the `Advent Of Code 2019` challenge
 //!
@@ -6,18 +6,27 @@
 
 use std::fmt::{Debug, Display};
 
+pub const INPUT_DAY1: &str = include_str!("../input/day1.txt");
+pub const INPUT_DAY2: &str = include_str!("../input/day2.txt");
+pub const INPUT_DAY3: &str = include_str!("../input/day3.txt");
+
 pub mod day1;
 pub mod day2;
+pub mod day3;
+
+mod error;
+
+pub use error::Error;
 
 /// Build `Advent of code`
-pub trait AdventOfCodeBuilder {
+pub trait AdventOfCodeBuilder<I> {
     /// Error
     type Error;
     /// Output
     type Output;
 
     /// Build
-    fn build() -> Result<Self::Output, Self::Error>;
+    fn build(i: I) -> Result<Self::Output, Self::Error>;
 }
 
 /// Run `Advent of code`

@@ -1,6 +1,6 @@
 //! Day 2: The Tyranny of the Rocket Equation
 
-use super::{AdventOfCodeBuilder, AdventOfCodeRunner};
+use super::{AdventOfCodeBuilder, AdventOfCodeRunner, Error};
 use itertools::Itertools;
 
 /// OP codes for Intcode
@@ -13,20 +13,20 @@ pub mod op_codes {
     pub const HALT: usize = 99;
 }
 
-/// Day2
-pub struct Day2 {
+/// Input
+pub struct Input {
     input: Vec<usize>,
 }
 
-impl AdventOfCodeBuilder for Day2 {
-    type Error = String;
+impl AdventOfCodeBuilder<&str> for Input {
+    type Error = Error;
     type Output = Self;
 
-    fn build() -> Result<Self::Output, Self::Error> {
-        let input: Result<Vec<usize>, String> = include_str!("../input/day2.txt")
+    fn build(input: &str) -> Result<Self::Output, Self::Error> {
+        let input: Result<Vec<_>, Error> = input
             .trim()
             .split(',')
-            .map(|line| line.parse().map_err(|e| format!("{:?}", e)))
+            .map(|line| line.parse().map_err(Into::into))
             .collect();
 
         let mut input = input?;
@@ -37,8 +37,8 @@ impl AdventOfCodeBuilder for Day2 {
     }
 }
 
-impl AdventOfCodeRunner for Day2 {
-    type Error = String;
+impl AdventOfCodeRunner for Input {
+    type Error = Error;
     type PartOne = usize;
     type PartTwo = usize;
 
@@ -47,13 +47,13 @@ impl AdventOfCodeRunner for Day2 {
     }
 }
 
-impl Day2 {
-    fn part_one(&self) -> Result<usize, String> {
+impl Input {
+    fn part_one(&self) -> Result<usize, Error> {
         let p = self.input.clone();
         execute_int_code(p).map(move |p| p[0])
     }
 
-    fn part_two(&self) -> Result<usize, String> {
+    fn part_two(&self) -> Result<usize, Error> {
         const OUTPUT: usize = 19_690_720;
 
         for pair in (1..=99).combinations(2) {
@@ -71,7 +71,7 @@ impl Day2 {
     }
 }
 
-fn execute_int_code(mut values: Vec<usize>) -> Result<Vec<usize>, String> {
+fn execute_int_code(mut values: Vec<usize>) -> Result<Vec<usize>, Error> {
     for idx in (0..values.len()).step_by(4) {
         match values[idx] {
             op_codes::ADD => {
@@ -87,7 +87,7 @@ fn execute_int_code(mut values: Vec<usize>) -> Result<Vec<usize>, String> {
                 values[pos] = values[lhs] * values[rhs];
             }
             op_codes::HALT => break,
-            _ => return Err("Invalid Intcode".into()),
+            _ => return Err(Error::Msg("Invalid intcode".into())),
         };
     }
 
@@ -100,7 +100,7 @@ mod tests {
 
     #[test]
     fn full() {
-        let (part_one, part_two) = Day2::build().unwrap().run().unwrap();
+        let (part_one, part_two) = Input::build(crate::INPUT_DAY2).unwrap().run().unwrap();
         assert_eq!(part_one, 5482655);
         assert_eq!(part_two, 4967);
     }
