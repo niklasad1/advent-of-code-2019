@@ -5,14 +5,17 @@
 //! `<https://adventofcode.com/2019>`
 
 use std::fmt::{Debug, Display};
+use std::ops::RangeInclusive;
 
 pub const INPUT_DAY1: &str = include_str!("../input/day1.txt");
 pub const INPUT_DAY2: &str = include_str!("../input/day2.txt");
 pub const INPUT_DAY3: &str = include_str!("../input/day3.txt");
+pub const INPUT_DAY4: RangeInclusive<u32> = (372_304..=847_060);
 
 pub mod day1;
 pub mod day2;
 pub mod day3;
+pub mod day4;
 
 mod error;
 
